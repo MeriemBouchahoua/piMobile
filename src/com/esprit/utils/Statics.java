@@ -5,12 +5,15 @@
  */
 package com.esprit.utils;
 
+import com.esprit.entites.User;
+
 /**
  *
  * @author b.maryem
  */
 public class Statics {
-    
-    public static final String BASE_URL="http://127.0.0.1:8000";
-    
+
+    public static final String BASE_URL = "http://127.0.0.1:8000";
+    public static final User user = new User(3, "aa@aa.aa", "soussa");
+
 }

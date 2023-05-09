@@ -8,6 +8,7 @@ package com.codename1.uikit.cleanmodern;
 import com.codename1.components.FloatingHint;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
@@ -69,17 +70,41 @@ public class ReservEventForm extends BaseForm {
                 next,signIn
         ));
         next.requestFocus();
-         next.addActionListener(e -> {
-            Reservation reservation = new Reservation();
-            reservation.setEvenements_id(Integer.valueOf(event_id.getText()));
-            reservation.setNombre_de_place_areserve(Integer.valueOf(nbrplace.getText()));
-            reservation.setEmail(email.getText());
-            
-             ReservationService rs = new ReservationService();
-            
-            rs.ajoutReservation(reservation);
-
-            new MesReservationsForm(res,reservation.getEmail(),reservation).show();
-        });
+        next.addActionListener(e -> {
+    // Check if all fields are filled
+    if (event_id.getText().isEmpty() || email.getText().isEmpty() || nbrplace.getText().isEmpty()) {
+        Dialog.show("Error", "Please fill in all fields", "OK", null);
+        return;
     }
+
+    // Check if the event ID and number of places are valid integers
+    try {
+        int eventId = Integer.parseInt(event_id.getText());
+        int numPlaces = Integer.parseInt(nbrplace.getText());
+        if (eventId <= 0 || numPlaces <= 0) {
+            Dialog.show("Error", "Please enter a valid event ID and number of places", "OK", null);
+            return;
+        }
+    } catch (NumberFormatException ex) {
+        Dialog.show("Error", "Please enter valid integers for the event ID and number of places", "OK", null);
+        return;
+    }
+
+   
+
+    // Create the Reservation object and add it to the database
+    Reservation reservation = new Reservation();
+    reservation.setEvenements_id(Integer.parseInt(event_id.getText()));
+    reservation.setNombre_de_place_areserve(Integer.parseInt(nbrplace.getText()));
+    reservation.setEmail(email.getText());
+
+    ReservationService rs = new ReservationService();
+    rs.ajoutReservation(reservation);
+
+    new MesReservationsForm(res, reservation.getEmail(), reservation).show();
+});
+
+
+}
+
 }

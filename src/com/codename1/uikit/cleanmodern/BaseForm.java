@@ -83,7 +83,10 @@ public class BaseForm extends Form {
         ));    
         tb.addMaterialCommandToSideMenu("Events", FontImage.MATERIAL_ARTICLE, e -> new EventFrom(res).show());
         tb.addMaterialCommandToSideMenu("Reservations", FontImage.MATERIAL_QUESTION_ANSWER, e -> new EventFrom(res).show());
+         tb.addMaterialCommandToSideMenu("Article", FontImage.MATERIAL_ARTICLE, e -> new ArticleDoc(res).show());
+        tb.addMaterialCommandToSideMenu("Posts", FontImage.MATERIAL_QUESTION_ANSWER, e -> new PostFormDoc(res).show());
         tb.addMaterialCommandToSideMenu("Logout", FontImage.MATERIAL_EXIT_TO_APP, e -> new SignInForm(res).show());
+        
     }
     protected void addSideMenuAdmin(Resources res) {
         Toolbar tb = getToolbar();
@@ -104,6 +107,29 @@ public class BaseForm extends Form {
         tb.addMaterialCommandToSideMenu("Events", FontImage.MATERIAL_ARTICLE, e -> new NewsfeedForm(res).show());
         tb.addMaterialCommandToSideMenu("AddEvents", FontImage.MATERIAL_QUESTION_ANSWER, e -> new NewsfeedForm(res).show());
       //  tb.addMaterialCommandToSideMenu("Reservations", FontImage.MATERIAL_QUESTION_ANSWER, e -> new NewsfeedForm(res).show());
+       tb.addMaterialCommandToSideMenu("Article", FontImage.MATERIAL_ARTICLE, e -> new ArticleDoc(res).show());
+        tb.addMaterialCommandToSideMenu("Posts", FontImage.MATERIAL_QUESTION_ANSWER, e -> new PostFormDoc(res).show());
+        tb.addMaterialCommandToSideMenu("Logout", FontImage.MATERIAL_EXIT_TO_APP, e -> new SignInForm(res).show());
+    }
+      protected void addSideMenuDoc(Resources res) {
+        Toolbar tb = getToolbar();
+        Image img = res.getImage("profile-background.jpg");
+        if(img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
+            img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
+        }
+        ScaleImageLabel sl = new ScaleImageLabel(img);
+        sl.setUIID("BottomPad");
+        sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
+        
+        tb.addComponentToSideMenu(LayeredLayout.encloseIn(
+                sl,
+                FlowLayout.encloseCenterBottom(
+                        new Label(res.getImage("profile-pic.jpg"), "PictureWhiteBackgrond"))
+        ));
+        
+        tb.addMaterialCommandToSideMenu("Article", FontImage.MATERIAL_ARTICLE, e -> new ArticleDoc(res).show());
+        tb.addMaterialCommandToSideMenu("Posts", FontImage.MATERIAL_QUESTION_ANSWER, e -> new PostFormDoc(res).show());
+     //   tb.addMaterialCommandToSideMenu("Add Comments to a post", FontImage.MATERIAL_QUESTION_ANSWER, e -> new addComment(res).show());
         tb.addMaterialCommandToSideMenu("Logout", FontImage.MATERIAL_EXIT_TO_APP, e -> new SignInForm(res).show());
     }
 }

@@ -8,6 +8,7 @@ package com.codename1.uikit.cleanmodern;
 import com.codename1.components.FloatingActionButton;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
+import com.codename1.components.ToastBar;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
 import com.codename1.ui.Component;
@@ -31,16 +32,17 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
-import com.services.services.EventService;
+import com.services.services.CommentService;
+import com.services.services.PostService;
 
 /**
  *
- *@author b.maryem
+ * @author z.maryem
  */
-public class EventFrom  extends BaseForm {
+public class PostForm  extends BaseForm {
 
-    public EventFrom(Resources res) {
-        super("Events", BoxLayout.y());
+    public PostForm(Resources res) {
+        super("Newsfeed", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
@@ -54,7 +56,7 @@ public class EventFrom  extends BaseForm {
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("eventss.jpg"), spacer1, "15 Likes  ", "85 Comments", "Event List");
+        addTab(swipe, res.getImage("first.jpg"), spacer1, "15 Likes  ", "85 Comments", "Questions asked by patients");
         addTab(swipe, res.getImage("dog.jpg"), spacer2, "100 Likes  ", "66 Comments", "Dogs are cute: story at 11");
                 
         swipe.setUIID("Container");
@@ -95,14 +97,52 @@ public class EventFrom  extends BaseForm {
         Component.setSameSize(radioContainer, spacer1, spacer2);
         add(LayeredLayout.encloseIn(swipe, radioContainer));
         
-
-
-        EventService es = new EventService();
+//        ButtonGroup barGroup = new ButtonGroup();
+//        RadioButton all = RadioButton.createToggle("All", barGroup);
+//        all.setUIID("SelectBar");
+//        RadioButton featured = RadioButton.createToggle("Featured", barGroup);
+//        featured.setUIID("SelectBar");
+//        RadioButton popular = RadioButton.createToggle("Popular", barGroup);
+//        popular.setUIID("SelectBar");
+//        RadioButton myFavorite = RadioButton.createToggle("My Favorites", barGroup);
+//        myFavorite.setUIID("SelectBar");
+//        Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
         
-        for (int i=0 ;  i< es.afficheEvent().size(); i++){
-            Button btn = new Button("Reserver");
+//        add(LayeredLayout.encloseIn(
+//                GridLayout.encloseIn(4, all, featured, popular, myFavorite),
+//                FlowLayout.encloseBottom(arrow)
+//        ));
+//        
+//        all.setSelected(true);
+//        arrow.setVisible(false);
+//        addShowListener(e -> {
+//            arrow.setVisible(true);
+//            updateArrowPosition(all, arrow);
+//        });
+//        bindButtonSelection(all, arrow);
+//        bindButtonSelection(featured, arrow);
+//        bindButtonSelection(popular, arrow);
+//        bindButtonSelection(myFavorite, arrow);
+        
+        // special case for rotation
+//        addOrientationListener(e -> {
+//            updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
+//        });
+//        
+
+        FloatingActionButton fab = FloatingActionButton.createFAB(FontImage.MATERIAL_ADD);
+fab.addActionListener(e ->  new addPostForm(res).show());
+fab.bindFabToContainer(getContentPane());
+
+        PostService ps = new PostService();
+        
+        for (int i=0 ;  i< ps.affichePost().size(); i++){
+            Button btn = new Button("delete");
+            Button btn2 = new Button("afficher reponse");
+              Button b =new Button("update");
             btn.getStyle().setBgColor(0xFF0000);
-        addButton(res.getImage("sante-mentale-cerveau-nature-creativite-idee.jpg"), es.afficheEvent().get(i).getNom_evenement(),es.afficheEvent().get(i).getDescription_evenement(), true,es.afficheEvent().get(i).getNbr_de_places() ,es.afficheEvent().get(i).getLieu_evenement(),btn,es.afficheEvent().get(i).getId(),res,i);
+
+        addButton(res.getImage("homme.png"), ps.affichePost().get(i).getDescription(),ps.affichePost().get(i).getPublication(), true, 26, 32,btn,ps.affichePost().get(i).getId(),res,btn2,b);
     }
     }
     
@@ -151,21 +191,21 @@ public class EventFrom  extends BaseForm {
         swipe.addTab("", page1);
     }
     
-   private void addButton(Image img, String title, String content,boolean liked, int nbrplace, String lieu , Button delete,int id,Resources res,int i) {
+   private void addButton(Image img, String title, String content,boolean liked, int likeCount, int commentCount, Button delete,int id,Resources res,Button  response,Button b) {
        int height = Display.getInstance().convertToPixels(11.5f);
        int width = Display.getInstance().convertToPixels(14f);
        Button image = new Button(img.fill(width, height));
-
+     
        image.setUIID("Label");
        Container cnt = BorderLayout.west(image);
-       
+         Container cnt2 = BorderLayout.center(BoxLayout.encloseX(delete,response,b));
        cnt.setLeadComponent(image);
        TextArea ta = new TextArea(title);
        TextArea c = new TextArea(content);
        ta.setUIID("NewsTopLine");
        ta.setEditable(false);
 
-       Label likes = new Label(nbrplace + " place  ", "NewsBottomLine");
+       Label likes = new Label(likeCount + " Likes  ", "NewsBottomLine");
        likes.setTextPosition(RIGHT);
        if(!liked) {
            FontImage.setMaterialIcon(likes, FontImage.MATERIAL_FAVORITE);
@@ -175,7 +215,7 @@ public class EventFrom  extends BaseForm {
            FontImage heartImage = FontImage.createMaterial(FontImage.MATERIAL_FAVORITE, s);
            likes.setIcon(heartImage);
        }
-       Label comments = new Label(lieu );
+       Label comments = new Label(commentCount + " Comments", "NewsBottomLine");
        FontImage.setMaterialIcon(likes, FontImage.MATERIAL_CHAT);
        
        
@@ -185,19 +225,31 @@ public class EventFrom  extends BaseForm {
                BoxLayout.encloseY(
                        ta,
                        c,
-                       BoxLayout.encloseX(likes, comments,delete)
+                       BoxLayout.encloseX(likes, comments)
                        
                ));
        
        add(cnt);
-       
-            image.addActionListener(e ->{
-                 
-                 EventService es = new EventService();
-                 
+       add(cnt2);
+            delete.addActionListener(e ->{
+                PostService ps = new PostService(); 
+                ps.deletePost(id);
                 
-                new ReservEventForm(res,es.afficheEvent().get(i)).show();
+                new PostForm(res).show();
                     });
+            
+            response.addActionListener(e->{
+                CommentService cs = new CommentService();
+                              String rep =  "";
+                 for (int j =0; j<cs.afficheComm(id).size();j++){
+                     rep = rep + cs.afficheComm(id).get(j).getResponse()+" + ";
+                 }
+               
+                ToastBar.showMessage(rep, FontImage.MATERIAL_INFO);
+            });
+            b.addActionListener(e->{
+                new UpdatePostForm(res, id).show();
+            });
 
       
    }
@@ -210,4 +262,3 @@ public class EventFrom  extends BaseForm {
         });
     }
 }
-

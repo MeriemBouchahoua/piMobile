@@ -5,9 +5,9 @@
  */
 package com.codename1.uikit.cleanmodern;
 
-import com.codename1.components.FloatingActionButton;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
+import com.codename1.components.ToastBar;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
 import com.codename1.ui.Component;
@@ -28,22 +28,27 @@ import com.codename1.ui.Toolbar;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
-import com.services.services.EventService;
+import com.services.services.ArticleService;
 
-public class EventFormAdmin extends BaseForm {
+/**
+ *
+ * @author z.maryem
+ */
+public class ArticleFormDoc extends BaseForm {
 
-    public EventFormAdmin(Resources res) {
-        super("Events", BoxLayout.y());
+    public ArticleFormDoc(Resources res) {
+        super("Articles", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
-        setTitle("Events");
+        setTitle("Newsfeed");
         getContentPane().setScrollVisible(false);
 
-        super.addSideMenu(res);
+        super.addSideMenuDoc(res);
         tb.addSearchCommand(e -> {
         });
 
@@ -51,7 +56,7 @@ public class EventFormAdmin extends BaseForm {
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("eventss.jpg"), spacer1, "15 Likes  ", "85 Comments", "Event List");
+        addTab(swipe, res.getImage("Wavy_Bus-15_Single-06.jpg"), spacer1, "15 Likes  ", "85 Comments", "the are articals written by different docters");
         addTab(swipe, res.getImage("dog.jpg"), spacer2, "100 Likes  ", "66 Comments", "Dogs are cute: story at 11");
 
         swipe.setUIID("Container");
@@ -92,22 +97,51 @@ public class EventFormAdmin extends BaseForm {
         Component.setSameSize(radioContainer, spacer1, spacer2);
         add(LayeredLayout.encloseIn(swipe, radioContainer));
 
-        FloatingActionButton fab = FloatingActionButton.createFAB(FontImage.MATERIAL_ADD);
-        fab.addActionListener(e -> new addEventForm(res).show());
-        fab.bindFabToContainer(getContentPane());
+        ButtonGroup barGroup = new ButtonGroup();
+        RadioButton all = RadioButton.createToggle("All", barGroup);
+        all.setUIID("SelectBar");
+        RadioButton featured = RadioButton.createToggle("Featured", barGroup);
+        featured.setUIID("SelectBar");
+        RadioButton popular = RadioButton.createToggle("Popular", barGroup);
+        popular.setUIID("SelectBar");
+        RadioButton myFavorite = RadioButton.createToggle("My Favorites", barGroup);
+        myFavorite.setUIID("SelectBar");
+        Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
 
-        EventService es = new EventService();
+        add(LayeredLayout.encloseIn(
+                GridLayout.encloseIn(4, all, featured, popular, myFavorite),
+                FlowLayout.encloseBottom(arrow)
+        ));
 
-        for (int i = 0; i < es.afficheEvent().size(); i++) {
-            Button btn = new Button("delete");
-            Button btn1 = new Button("update");
-            btn.getStyle().setBgColor(0xFF0000);
-            addButton(es.afficheEvent().get(i).getDate_evenement(),res.getImage("sante-mentale-cerveau-nature-creativite-idee.jpg"), es.afficheEvent().get(i).getNom_evenement(),
-                    es.afficheEvent().get(i).getDescription_evenement(), true, es.afficheEvent().get(i).getNbr_de_places() , 32, btn, 
-                    es.afficheEvent().get(i).getId(), res, i, btn1);
-                 
+        all.setSelected(true);
+        arrow.setVisible(false);
+        addShowListener(e -> {
+            arrow.setVisible(true);
+            updateArrowPosition(all, arrow);
+        });
+        bindButtonSelection(all, arrow);
+        bindButtonSelection(featured, arrow);
+        bindButtonSelection(popular, arrow);
+        bindButtonSelection(myFavorite, arrow);
 
+        // special case for rotation
+        addOrientationListener(e -> {
+            updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
+        });
+
+        
+        
+        
+        
+        ArticleService as = new ArticleService();
+        
+        for (int i =0 ; i<as.afficheArticle().size();i++){
+             addButton(res.getImage("homme.png"), as.afficheArticle().get(i).getArticle(), false, 26, 32);
         }
+
+//        FloatingActionButton fab = FloatingActionButton.createFAB(FontImage.MATERIAL_ADD);
+//        fab.addActionListener(e -> new AddArticleForm(res).show());
+//        fab.bindFabToContainer(getContentPane());
     }
 
     private void updateArrowPosition(Button b, Label arrow) {
@@ -154,22 +188,18 @@ public class EventFormAdmin extends BaseForm {
         swipe.addTab("", page1);
     }
 
-    private void addButton(String date,Image img, String title, String content, boolean liked, int likeCount, int commentCount, Button delete, int id, Resources res, int i, Button update) {
+    private void addButton(Image img, String title, boolean liked, int likeCount, int commentCount) {
         int height = Display.getInstance().convertToPixels(11.5f);
         int width = Display.getInstance().convertToPixels(14f);
         Button image = new Button(img.fill(width, height));
-
         image.setUIID("Label");
         Container cnt = BorderLayout.west(image);
-        Container cnt2 = BorderLayout.center(BoxLayout.encloseX(delete, update));
-
         cnt.setLeadComponent(image);
         TextArea ta = new TextArea(title);
-        TextArea c = new TextArea(content);
         ta.setUIID("NewsTopLine");
         ta.setEditable(false);
 
-        Label likes = new Label(likeCount + " places  ");
+        Label likes = new Label(likeCount + " Likes  ", "NewsBottomLine");
         likes.setTextPosition(RIGHT);
         if (!liked) {
             FontImage.setMaterialIcon(likes, FontImage.MATERIAL_FAVORITE);
@@ -179,29 +209,16 @@ public class EventFormAdmin extends BaseForm {
             FontImage heartImage = FontImage.createMaterial(FontImage.MATERIAL_FAVORITE, s);
             likes.setIcon(heartImage);
         }
-        Label comments = new Label(date  );
+        Label comments = new Label(commentCount + " Comments", "NewsBottomLine");
         FontImage.setMaterialIcon(likes, FontImage.MATERIAL_CHAT);
+
         cnt.add(BorderLayout.CENTER,
                 BoxLayout.encloseY(
                         ta,
-                        c,
                         BoxLayout.encloseX(likes, comments)
                 ));
-
         add(cnt);
-        add(cnt2);
-
-        delete.addActionListener(e -> {
-            EventService es = new EventService();
-            es.deleteEvent(id);
-            new EventFormAdmin(res).show();
-
-        });
-
-        update.addActionListener(e -> {
-                 new UpdateEventForm(res,id).show();
-        });
-
+        image.addActionListener(e -> ToastBar.showMessage(title, FontImage.MATERIAL_INFO));
     }
 
     private void bindButtonSelection(Button b, Label arrow) {

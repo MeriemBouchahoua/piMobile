@@ -57,7 +57,7 @@ public class UpdateEventForm extends BaseForm {
         Button signIn = new Button("headback");
         signIn.addActionListener(e -> previous.showBack());
         signIn.setUIID("Link");
-        Label alreadHaveAnAccount = new Label("List Of Question");
+        Label alreadHaveAnAccount = new Label("List Of Events");
 
         Container content = BoxLayout.encloseY(
                 new Label("Sign Up", "LogoLabel"),
@@ -100,21 +100,7 @@ public class UpdateEventForm extends BaseForm {
             new EventFormAdmin(res).show();
             
             
-//            Post post = new Post();
-//            post.setId_user(Integer.valueOf(id_user.getText()));
-//            post.setDescription(description.getText());
-//            post.setPublication(publication.getText());
-//            post.setNom_utilisateur(nom_utilisateur.getText());
-//        
-//           
-//            post.setCreated_at(created_at.getText());
-//            post.setUpdated_at(updated_at.getText());
-//            
-//            PostService ps = new PostService();
-//            
-//            ps.ajoutPost(post);
-//
-//            new PostForm(res).show();
+
         });
     }
 

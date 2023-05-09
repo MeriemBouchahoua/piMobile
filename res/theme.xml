@@ -13,6 +13,8 @@
     <image name="68A608E4-8C4F-4B3F-A5BE-1C224B518686-63f0d2bac01c7.png"  />
     <image name="68A608E4-8C4F-4B3F-A5BE-1C224B518686-63f14351ecb81.png"  />
     <image name="activation-background.jpg"  />
+    <image name="boy-6406219b6ca4e.png"  />
+    <image name="cart.png"  />
     <image name="confirmation-background.jpg"  />
     <image name="delete.png"  />
     <image name="dog.jpg"  />
@@ -21,16 +23,20 @@
     <image name="eventss.jpg"  />
     <image name="facebook-logo.png" type="multi"  />
     <image name="first.jpg"  />
+    <image name="fr-removebg-preview-6458187d2fba8.png"  />
     <image name="hd.jpg"  />
     <image name="homme.png"  />
     <image name="image.png"  />
     <image name="images-63f3e3459347f.png"  />
     <image name="images-63f3fc54b7a60.jpg"  />
+    <image name="images-63f4ae1fe2f71-64078cac507c1.png"  />
     <image name="images-63f4ae1fe2f71.png"  />
     <image name="images-63f5d65d788d8.png"  />
     <image name="img-prev-ui-6403adaee408e.png"  />
     <image name="loglog.png"  />
     <image name="M-6400bb6c819e5.jpg"  />
+    <image name="M-64063e40d0d9a.jpg"  />
+    <image name="man-640629ce4cb63.png"  />
     <image name="new_ev.jpg"  />
     <image name="news-item-1.jpg"  />
     <image name="news-item-2.jpg"  />
@@ -44,13 +50,16 @@
     <image name="on-off-on.png" type="multi"  />
     <image name="profile-background.jpg"  />
     <image name="profile-pic.jpg" type="multi"  />
+    <image name="sante-mentale-cerveau-nature-creativite-idee-63f3fb4dad3d4-64078d25420b5.jpg"  />
     <image name="sante-mentale-cerveau-nature-creativite-idee-63f3fb4dad3d4.jpg"  />
     <image name="sante-mentale-cerveau-nature-creativite-idee-63f4b416a1bfb.jpg"  />
     <image name="sante-mentale-cerveau-nature-creativite-idee-63f5e2a6902fe.jpg"  />
     <image name="sante-mentale-cerveau-nature-creativite-idee-63f5ee1592bde.jpg"  />
+    <image name="sante-mentale-cerveau-nature-creativite-idee.jpg"  />
     <image name="signin-background.jpg"  />
     <image name="signup-background.jpg"  />
     <image name="smily.png" type="multi"  />
+    <image name="telechargement-63f3f89cf2f7f-64078be5e8d8f.png"  />
     <image name="telechargement-63f3f89cf2f7f.png"  />
     <image name="telechargement-63f5d9a067925.png"  />
     <theme name="Theme">
@@ -366,6 +375,7 @@
     <image name="timeline-background.jpg"  />
     <image name="tt.png"  />
     <image name="twitter-logo.png" type="multi"  />
+    <image name="t&#xe9;l&#xe9;chargement.png"  />
     <image name="Wavy_Bus-15_Single-06.jpg"  />
     <image name="welcome-background.jpg"  />
     <image name="welcome-slide-1.png" type="multi"  />
