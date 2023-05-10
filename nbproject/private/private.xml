@@ -4,13 +4,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ALPHA/Desktop/mobile4-main/src/com/codename1/uikit/cleanmodern/addEventForm.java</file>
-            <file>file:/C:/Users/ALPHA/Desktop/mobile4-main/src/com/codename1/uikit/cleanmodern/NewsfeedForm.java</file>
-            <file>file:/C:/Users/ALPHA/Desktop/mobile4-main/src/com/codename1/uikit/cleanmodern/productsListForm.java</file>
-            <file>file:/C:/Users/ALPHA/Desktop/mobile4-main/src/com/codename1/uikit/cleanmodern/PostForm.java</file>
+            <file>file:/C:/Users/ALPHA/Desktop/mobile4-main/src/com/services/services/ArticleService.java</file>
+            <file>file:/C:/Users/ALPHA/Desktop/mobile4-main/src/com/services/services/ServiceUtilisateur.java</file>
             <file>file:/C:/Users/ALPHA/Desktop/mobile4-main/src/com/codename1/uikit/cleanmodern/SignInForm.java</file>
-            <file>file:/C:/Users/ALPHA/Desktop/mobile4-main/src/com/codename1/uikit/cleanmodern/EventFrom.java</file>
-            <file>file:/C:/Users/ALPHA/Desktop/mobile4-main/src/com/codename1/uikit/cleanmodern/MesReservationsForm.java</file>
+            <file>file:/C:/Users/ALPHA/Desktop/mobile4-main/src/com/esprit/utils/Statics.java</file>
+            <file>file:/C:/Users/ALPHA/Desktop/mobile4-main/src/com/codename1/uikit/cleanmodern/SignUpForm.java</file>
         </group>
     </open-files>
 </project-private>

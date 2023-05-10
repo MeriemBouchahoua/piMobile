@@ -11,6 +11,7 @@ import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.events.ActionListener;
+import com.codename1.uikit.cleanmodern.SessionManager;
 import com.esprit.utils.Statics;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,10 +47,10 @@ public class ShoppingCartService {
     public boolean addItem(Product p) {
 
         int productId = p.getId();
-        int userId = Statics.user.getId();
+        int userId = SessionManager.getId();
 
         //String url = Statics.BASE_URL + "create?name=" + t.getName() + "&status=" + t.getStatus();
-        String url = Statics.BASE_URL + "api/addToCart/" + productId + "/" + userId;
+        String url = Statics.BASE_URL + "/api/addToCart/" + productId + "/" + userId;
 
         req.setUrl(url);
         req.setPost(false);
@@ -67,10 +68,10 @@ public class ShoppingCartService {
 
     public boolean removeItem(ShoppingCartItem item) {
         int itemtId = item.getId();
-        int userId = Statics.user.getId();
+        int userId = SessionManager.getId();
 
         //String url = Statics.BASE_URL + "create?name=" + t.getName() + "&status=" + t.getStatus();
-        String url = Statics.BASE_URL + "api/removeItem/" + itemtId + "/" + userId;
+        String url = Statics.BASE_URL + "/api/removeItem/" + itemtId + "/" + userId;
 
         req.setUrl(url);
         req.setPost(false);
@@ -129,8 +130,10 @@ public class ShoppingCartService {
     }
 
     public ArrayList<ShoppingCartItem> getCart() {
-        int userId = Statics.user.getId();
-        String url = Statics.BASE_URL + "api/cart/" + userId;
+        System.out.println("user ???????");
+        System.out.println(SessionManager.getId());
+        int userId = SessionManager.getId();
+        String url = Statics.BASE_URL + "/api/cart/" + userId;
         req.setUrl(url);
         req.setPost(false);
         req.addResponseListener(new ActionListener<NetworkEvent>() {
@@ -143,4 +146,25 @@ public class ShoppingCartService {
         NetworkManager.getInstance().addToQueueAndWait(req);
         return items;
     }
+
+    public boolean decreaseQuantities() {
+        String url = Statics.BASE_URL + "/api/addCommande/" + SessionManager.getId();
+
+        req.setUrl(url);
+        req.setPost(false);
+
+        req.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                if (req.getResponseCode() != 200) {
+                    resultOK = false;
+                }
+                req.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
+
+        return resultOK;
+    }
+
 }
