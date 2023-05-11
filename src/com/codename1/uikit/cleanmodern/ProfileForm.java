@@ -19,12 +19,16 @@
 
 package com.codename1.uikit.cleanmodern;
 
+import com.codename1.components.InfiniteProgress;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.ui.CheckBox;
 import com.codename1.ui.Component;
 import com.codename1.ui.Display;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
+import com.codename1.ui.Dialog;
+import com.codename1.ui.Button;
+import static com.codename1.ui.Component.BOTTOM;
 import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.layouts.BorderLayout;
@@ -34,20 +38,24 @@ import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import com.services.services.ServiceUtilisateur;
+
+
+
 
 /**
  * The user profile form
  *
- * @author Shai Almog
+ * @author rayen
  */
 public class ProfileForm extends BaseForm {
 
     public ProfileForm(Resources res) {
-        super("Newsfeed", BoxLayout.y());
+        super( BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
-        setTitle("Profile");
+        setTitle("Mon profile");
         getContentPane().setScrollVisible(false);
         
         super.addSideMenu(res);
@@ -62,7 +70,7 @@ public class ProfileForm extends BaseForm {
         ScaleImageLabel sl = new ScaleImageLabel(img);
         sl.setUIID("BottomPad");
         sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
-
+        
         Label facebook = new Label("786 followers", res.getImage("facebook-logo.png"), "BottomPad");
         Label twitter = new Label("486 followers", res.getImage("twitter-logo.png"), "BottomPad");
         facebook.setTextPosition(BOTTOM);
@@ -79,19 +87,30 @@ public class ProfileForm extends BaseForm {
                     )
                 )
         ));
+        
+        
+        
+        Button modiff = new Button("Modifier");
 
-        TextField username = new TextField("sandeep");
-        username.setUIID("TextFieldBlack");
-        addStringValue("Username", username);
-
-        TextField email = new TextField("sandeep@gmail.com", "E-Mail", 20, TextField.EMAILADDR);
+        
+        
+       String us = SessionManager.getEmail();
+       System.out.println(us);
+       
+        TextField email = new TextField(SessionManager.getEmail(), "E-Mail", 20, TextField.EMAILADDR);
         email.setUIID("TextFieldBlack");
         addStringValue("E-Mail", email);
         
-        TextField password = new TextField("sandeep", "Password", 20, TextField.PASSWORD);
+        TextField password = new TextField(SessionManager.getPassowrd(), "Password", 20, TextField.PASSWORD);
         password.setUIID("TextFieldBlack");
         addStringValue("Password", password);
+        
+        
+        modiff.setUIID("edit");
+        addStringValue("",modiff);
+        
 
+        
         CheckBox cb1 = CheckBox.createToggle(res.getImage("on-off-off.png"));
         cb1.setUIID("Label");
         cb1.setPressedIcon(res.getImage("on-off-on.png"));
@@ -99,8 +118,19 @@ public class ProfileForm extends BaseForm {
         cb2.setUIID("Label");
         cb2.setPressedIcon(res.getImage("on-off-on.png"));
         
-        addStringValue("Facebook", FlowLayout.encloseRightMiddle(cb1));
-        addStringValue("Twitter", FlowLayout.encloseRightMiddle(cb2));
+       
+        modiff.addActionListener((edit)-> {
+        InfiniteProgress ip = new InfiniteProgress();
+        final Dialog ipDlg = ip.showInfiniteBlocking();
+        ServiceUtilisateur.getInstance().editUser(password,email);
+        SessionManager.setPassowrd(password.getText());
+        SessionManager.setEmail(email.getText());
+        Dialog.show("Succes","Modificationss des cordonnees avec succes","OK",null);
+        ipDlg.dispose();
+        refreshTheme();
+        
+    });
+    
     }
     
     private void addStringValue(String s, Component v) {

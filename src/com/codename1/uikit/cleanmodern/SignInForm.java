@@ -29,7 +29,7 @@ import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.util.Resources;
-import com.sun.media.jfxmedia.events.NewFrameEvent;
+import com.services.services.ServiceUtilisateur;
 
 /**
  * Sign in UI
@@ -49,39 +49,58 @@ public class SignInForm extends BaseForm {
         getTitleArea().setUIID("Container");
         setUIID("SignIn");
         
-        add(BorderLayout.NORTH, new Label(res.getImage("loglog.png"), "LogoLabel"));
+        add(BorderLayout.NORTH, new Label(res.getImage("Logo.png"), "LogoLabel"));
         
-        TextField username = new TextField("", "Username", 20, TextField.ANY);
+        TextField email = new TextField("", "Email", 20, TextField.ANY);
         TextField password = new TextField("", "Password", 20, TextField.PASSWORD);
-        username.setSingleLineTextArea(false);
+        email.setSingleLineTextArea(false);
         password.setSingleLineTextArea(false);
         Button signIn = new Button("Sign In");
         Button signUp = new Button("Sign Up");
+        
+        //mp oublié
+        Button  mp = new Button("oublier mot de passe?","CenterLabel");
+        
+        
         signUp.addActionListener(e -> new SignUpForm(res).show());
         signUp.setUIID("Link");
-        Label doneHaveAnAccount = new Label("Don't have an account?");
+        Label doneHaveAnAccount = new Label("Vous n'avez aucune compte?");
+        
+        
+        
+        
+        
         
         Container content = BoxLayout.encloseY(
-                new FloatingHint(username),
+                new FloatingHint(email),
                 createLineSeparator(),
                 new FloatingHint(password),
                 createLineSeparator(),
                 signIn,
-                FlowLayout.encloseCenter(doneHaveAnAccount, signUp)
+                FlowLayout.encloseCenter(doneHaveAnAccount, signUp),mp
         );
         content.setScrollableY(true);
         add(BorderLayout.SOUTH, content);
         signIn.requestFocus();
-        signIn.addActionListener(e -> {
+        
+        signIn.addActionListener(e -> 
+        {
+               ServiceUtilisateur.getInstance().signin(email, password, res);
+
+           
+        });
+        
+        
+        
+        //Mp oublie event
+        
+        mp.addActionListener((e) -> {
+           
+            new ActivateForm(res).show();
             
-            if (username.getText().equals("admin")){
-                   new EventFormAdmin(res).show();
             
-            }else {
-                new EventFrom(res).show();
-            }
-         
-                });
+        });
+        
     }
     
 }
